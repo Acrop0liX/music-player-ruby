@@ -354,6 +354,35 @@ def edit_album(albums)
     print_separator
 end
 
+# Allows user to delete an existing album from array
+def delete_album(albums)
+    read_string("You selected 'Delete an Album'. Press enter to continue")
+    if albums.length == 0
+        puts "No albums available. Please Read in Albums first."
+        print_separator
+    end
+
+    index = 0
+    while index < albums.length
+        puts "#{index + 1}: #{albums[index].title} by #{albums[index].artist}"
+        index += 1
+    end
+
+choice = read_integer_in_range("Select an album to delete:", 1, albums.length)
+    album = albums[choice - 1]
+    print separator
+    puts "Are you sure you want to delete '#{album.title}' by '#{album.artist}'? (yes/no)"
+    confirm = gets.chomp.strip.downcase
+
+    if confirm == "yes"
+        albums.delete_at(choice - 1)
+        puts "Album '#{album.title}' by '#{album.artist}' has been deleted successfully."
+    else
+        puts "Deletion cancelled. Album '#{album.title}' was not deleted."
+    end
+    print_separator
+end
+
 # Saves albums array to a file in the same format read_in_album expects
 def save_albums(albums)
     read_string("You selected 'Save Albums'. Press enter to continue")
@@ -393,9 +422,10 @@ def main
         puts '3. Select an Album to play'
         puts '4. Add an Album'
         puts '5. Edit an Album'
-        puts '6. Save Albums'
-        puts '7. Exit the Application'
-        choice = read_integer_in_range("Please enter your choice:", 1, 7)
+        puts '6. Delete an Album'
+        puts '7. Save Albums'
+        puts '8. Exit the Application'
+        choice = read_integer_in_range("Please enter your choice:", 1, 8)
         case choice
         when 1
             print_separator
@@ -414,8 +444,11 @@ def main
             edit_album(albums)
         when 6
             print_separator
-            save_albums(albums)
+            delete_album(albums)  
         when 7
+            print_separator
+            save_albums(albums)
+        when 8
             finished = true
         else
             puts "Please select again"
